@@ -8,3 +8,7 @@ directory.
 ```bash
 $ export_strings.py --source path/to/directory --output path/to/output
 ```
+
+### Examples:
+
+- [Xcode.app](https://github.com/keith/Xcode.app-strings)
