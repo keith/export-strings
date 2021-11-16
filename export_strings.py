@@ -32,7 +32,16 @@ def process_executables(source, output, command):
         sys.exit(1)
 
     for full_path, output_path in find_executables(source, output):
-        output = subprocess.check_output(command + [full_path])
+        try:
+            archs = subprocess.check_output(["lipo","-archs", full_path]).decode()
+        except:
+            archs = ""
+        cmd = ["strings"]
+        if "x86_64" in archs:
+            cmd.append("-arch")
+            cmd.append("x86_64")
+        print(cmd, full_path)
+        output = subprocess.check_output(cmd + [full_path])
         open(output_path, "w+").write(output)
 
 
