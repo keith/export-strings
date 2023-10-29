@@ -7,9 +7,7 @@ import unittest
 
 class ExecutableFixtureTests(unittest.TestCase):
     def test_finding_specific_files(self):
-        files = map(lambda x: x[0],
-                    list(export_strings.find_files(helpers.FIXTURE_PATH,
-                                                   lambda x: True)))
+        files = [x[0] for x in export_strings.find_files(helpers.FIXTURE_PATH, lambda _: True)]
         self.assertEqual(len(files), 4)
         self.assertIn("executable", files)
         self.assertIn("nested/nested_executable", files)
@@ -18,13 +16,13 @@ class ExecutableFixtureTests(unittest.TestCase):
 
     def test_full_path_exists(self):
         files = list(export_strings.find_files(helpers.FIXTURE_PATH,
-                                               lambda x: True))
+                                               lambda _: True))
         path = files[0][1]
         self.assertTrue(os.path.exists(path))
 
     def test_relative_path_exists(self):
         files = list(export_strings.find_files(helpers.FIXTURE_PATH,
-                                               lambda x: True))
+                                               lambda _: True))
         path = files[0][0]
         self.assertTrue(os.path.exists(
             os.path.join(helpers.FIXTURE_PATH, path)))
@@ -46,7 +44,8 @@ class ExecutableFixtureTests(unittest.TestCase):
         files = export_strings.find_executables(helpers.FIXTURE_PATH,
                                                 helpers.TEST_DIR)
         for _, output_path in files:
-            contents = open(output_path).read().strip()
+            with open(output_path) as f:
+                contents = f.read().strip()
             expected = "file: {}".format(os.path.basename(output_path))
             self.assertEqual(contents, expected)
 

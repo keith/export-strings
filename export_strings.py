@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import print_function
 from filesystem_helpers import *
@@ -27,13 +27,14 @@ def validate_paths(source, output):
 def process_executables(source, output, command):
     try:
         source, output = validate_paths(source, output)
-    except InvalidPathException, exception:
+    except InvalidPathException as exception:
         print(exception, file=sys.stderr)
         sys.exit(1)
 
     for full_path, output_path in find_executables(source, output):
         output = subprocess.check_output(command + [full_path])
-        open(output_path, "w+").write(output)
+        with open(output_path, "wb+") as f:
+            f.write(output)
 
 
 if __name__ == "__main__":
